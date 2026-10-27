@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <style>
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fc;
+            color: #292747;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: linear-gradient(180deg, #6c5ce7, #5145bd);
+            color: white;
+            padding: 30px 20px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 26px;
+            margin-bottom: 40px;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #dedaff;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 13px 12px;
+            margin-bottom: 10px;
+            border-radius: 9px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-bottom {
+            margin-top: 55px;
+            font-size: 13px;
+            color: #e1ddff;
+            line-height: 1.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .topbar h1 {
+            font-size: 27px;
+        }
+
+        .subtitle {
+            color: #88889f;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .student-badge {
+            background: white;
+            padding: 11px 15px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        /* Welcome Banner */
+        .welcome {
+            background: linear-gradient(110deg, #7666ed, #a092f8);
+            color: white;
+            padding: 28px;
+            border-radius: 17px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome h2 {
+            font-size: 26px;
+            margin: 8px 0;
+        }
+
+        .welcome p {
+            font-size: 13px;
+        }
+
+        .welcome-icon {
+            font-size: 48px;
+            background: rgba(255, 255, 255, 0.18);
+            padding: 12px;
+            border-radius: 15px;
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transition: 0.3s;
+        }
+
+        .stat-card:hover,
+        .subject-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-icon {
+            font-size: 23px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card p {
+            color: #88889f;
+            font-size: 12px;
+        }
+
+        .stat-card h2 {
+            font-size: 27px;
+            margin: 5px 0;
+        }
+
+        .stat-card span {
+            color: #9999aa;
+            font-size: 11px;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 10px;
+        }
+
+        .section-heading h2 {
+            font-size: 20px;
+        }
+
+        .section-heading p {
+            color: #88889f;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .semester {
+            background: #eeeaff;
+            color: #6c5ce7;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        /* Subject Cards */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .subject-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .subject-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .subject-icon {
+            font-size: 24px;
+        }
+
+        .percentage {
+            color: #6c5ce7;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .subject-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .subject-card p {
+            color: #88889f;
+            font-size: 12px;
+            margin-bottom: 17px;
+        }
+
+        .progress-bar {
+            background: #eeeeF5;
+            height: 7px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .purple-bar {
+            background: #7868ed;
+        }
+
+        .green-bar {
+            background: #35c995;
+        }
+
+        .orange-bar {
+            background: #ffac55;
+        }
+
+        .pink-bar {
+            background: #ed7eaf;
+        }
+
+        .progress-text {
+            display: block;
+            color: #88889f;
+            font-size: 11px;
+            margin-top: 9px;
+        }
+
+        /* Exams and Profile */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .panel {
+            background: white;
+            padding: 23px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .exam-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f5;
+        }
+
+        .exam-item:last-child {
+            border-bottom: none;
+        }
+
+        .date-box {
+            min-width: 50px;
+            text-align: center;
+            padding: 8px;
+            border-radius: 9px;
+            background: #eeeaff;
+            color: #6c5ce7;
+        }
+
+        .date-box strong {
+            display: block;
+            font-size: 20px;
+        }
+
+        .date-box span {
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .green-date {
+            background: #e1f8ed;
+            color: #209f70;
+        }
+
+        .orange-date {
+            background: #fff0dd;
+            color: #d88932;
+        }
+
+        .exam-details h3 {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .exam-details p {
+            font-size: 11px;
+            color: #88889f;
+        }
+
+        /* Profile */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f5;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #eeeaff;
+            color: #6c5ce7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .profile-header h3 {
+            font-size: 15px;
+        }
+
+        .profile-header p {
+            font-size: 12px;
+            color: #88889f;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-top: 20px;
+        }
+
+        .profile-info span {
+            display: block;
+            color: #88889f;
+            font-size: 11px;
+        }
+
+        .profile-info strong {
+            display: block;
+            font-size: 12px;
+            margin-top: 3px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 0 5px;
+            color: #88889f;
+            font-size: 12px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .main-content {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .dashboard {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .menu-title,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .sidebar nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar a {
+                margin: 0;
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid,
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .welcome {
+                padding: 20px;
+            }
+
+            .welcome h2 {
+                font-size: 22px;
+            }
+
+            .welcome-icon {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2 class="logo">StudySpace</h2>
+
+        <p class="menu-title">MENU</p>
+
+        <nav>
+            <a href="#home" class="active">🏠 Dashboard</a>
+            <a href="#subjects">📚 My Subjects</a>
+            <a href="#exams">📝 Upcoming Exams</a>
+            <a href="#profile">👤 My Profile</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <strong>Keep learning!</strong><br>
+            Your future starts today ✨
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="home">
+
+        <header class="topbar">
+            <div>
+                <h1>Student Dashboard</h1>
+                <p class="subtitle">Your learning journey at a glance.</p>
+            </div>
+
+            <div class="student-badge">🎓 Student</div>
+        </header>
+
+        <!-- Welcome -->
+        <section class="welcome">
+            <div>
+                <p>WELCOME BACK!</p>
+                <h2>Hello, Alex! 👋</h2>
+                <p>Stay focused, work hard and achieve your goals.</p>
+            </div>
+
+            <div class="welcome-icon">📖</div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <div class="stat-icon">📚</div>
+                <p>Total Subjects</p>
+                <h2>06</h2>
+                <span>Enrolled this semester</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon">✅</div>
+                <p>Attendance</p>
+                <h2>92%</h2>
+                <span>Great attendance!</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon">📋</div>
+                <p>Assignments</p>
+                <h2>08</h2>
+                <span>Completed assignments</span>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <p>Current CGPA</p>
+                <h2>9.2</h2>
+                <span>Keep it up!</span>
+            </article>
+
+        </section>
+
+        <!-- Subjects -->
+        <section class="section" id="subjects">
+
+            <div class="section-heading">
+                <div>
+                    <h2>My Subjects</h2>
+                    <p>Track your learning progress</p>
+                </div>
+
+                <span class="semester">Semester 5</span>
+            </div>
+
+            <div class="subjects-grid">
+
+                <article class="subject-card">
+                    <div class="subject-top">
+                        <span class="subject-icon">💻</span>
+                        <span class="percentage">85%</span>
+                    </div>
+
+                    <h3>Web Development</h3>
+                    <p>HTML, CSS and web design</p>
+
+                    <div class="progress-bar">
+                        <div class="progress purple-bar"
+                             style="width: 85%"></div>
+                    </div>
+
+                    <span class="progress-text">85% completed</span>
+                </article>
+
+                <article class="subject-card">
+                    <div class="subject-top">
+                        <span class="subject-icon">☕</span>
+                        <span class="percentage">70%</span>
+                    </div>
+
+                    <h3>Java Programming</h3>
+                    <p>OOP and programming basics</p>
+
+                    <div class="progress-bar">
+                        <div class="progress green-bar"
+                             style="width: 70%"></div>
+                    </div>
+
+                    <span class="progress-text">70% completed</span>
+                </article>
+
+                <article class="subject-card">
+                    <div class="subject-top">
+                        <span class="subject-icon">☁️</span>
+                        <span class="percentage">60%</span>
+                    </div>
+
+                    <h3>Cloud Computing</h3>
+                    <p>Cloud services and security</p>
+
+                    <div class="progress-bar">
+                        <div class="progress orange-bar"
+                             style="width: 60%"></div>
+                    </div>
+
+                    <span class="progress-text">60% completed</span>
+                </article>
+
+                <article class="subject-card">
+                    <div class="subject-top">
+                        <span class="subject-icon">🗄️</span>
+                        <span class="percentage">75%</span>
+                    </div>
+
+                    <h3>Database Systems</h3>
+                    <p>SQL and database concepts</p>
+
+                    <div class="progress-bar">
+                        <div class="progress pink-bar"
+                             style="width: 75%"></div>
+                    </div>
+
+                    <span class="progress-text">75% completed</span>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Exams and Profile -->
+        <div class="bottom-grid">
+
+            <section class="panel section" id="exams">
+                <div class="section-heading">
+                    <div>
+                        <h2>Upcoming Exams</h2>
+                        <p>Be prepared and stay confident</p>
+                    </div>
+                </div>
+
+                <div class="exam-item">
+                    <div class="date-box">
+                        <strong>12</strong>
+                        <span>NOV</span>
+                    </div>
+
+                    <div class="exam-details">
+                        <h3>Java Programming</h3>
+                        <p>10:00 AM · Room 204</p>
+                    </div>
+                </div>
+
+                <div class="exam-item">
+                    <div class="date-box green-date">
+                        <strong>15</strong>
+                        <span>NOV</span>
+                    </div>
+
+                    <div class="exam-details">
+                        <h3>Cloud Computing</h3>
+                        <p>11:00 AM · Room 105</p>
+                    </div>
+                </div>
+
+                <div class="exam-item">
+                    <div class="date-box orange-date">
+                        <strong>18</strong>
+                        <span>NOV</span>
+                    </div>
+
+                    <div class="exam-details">
+                        <h3>Web Development</h3>
+                        <p>09:30 AM · Computer Lab</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel section" id="profile">
+                <div class="section-heading">
+                    <div>
+                        <h2>My Profile</h2>
+                        <p>Your academic information</p>
+                    </div>
+                </div>
+
+                <div class="profile-header">
+                    <div class="avatar">A</div>
+
+                    <div>
+                        <h3>Alex Johnson</h3>
+                        <p>BCA Student</p>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <div>
+                        <span>Student ID</span>
+                        <strong>BCA2025</strong>
+                    </div>
+
+                    <div>
+                        <span>Course</span>
+                        <strong>Bachelor of Computer Applications</strong>
+                    </div>
+
+                    <div>
+                        <span>Semester</span>
+                        <strong>5th Semester</strong>
+                    </div>
+
+                    <div>
+                        <span>Department</span>
+                        <strong>Computer Applications</strong>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p>© 2026 StudySpace | Designed with HTML & CSS 💜</p>
+        </footer>
+
+    </main>
+</div>
+
+</body>
+</html>
